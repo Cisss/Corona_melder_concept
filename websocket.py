@@ -25,9 +25,9 @@ class SimpleChat(WebSocket):
                         print(room)
                         print(rooms[room])
                         if self in rooms[room]:
-                            print('the room I am in')
                             for client in clients:
-                                client.sendMessage("random question")
+                                if client in rooms[room]:
+                                    client.sendMessage("random question")
                             
 
         # Add player to room
