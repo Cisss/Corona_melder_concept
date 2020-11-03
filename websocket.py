@@ -25,8 +25,7 @@ class SimpleChat(WebSocket):
             if room in rooms:
                 datad = {self}
                 rooms[room] += datad
-                room_data = rooms[room]
-                players[room] = room_data
+                players[room] = rooms[room].copy()
             else:
                 print('invalid number')
 
