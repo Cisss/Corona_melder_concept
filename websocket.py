@@ -32,6 +32,15 @@ class SimpleChat(WebSocket):
                 players[room] = rooms[room].copy()
             else:
                 print('invalid number')
+        # delete room
+        elif 'delete' in message:
+            room = message['delete']
+            print(rooms)
+            print(room)
+            rooms.pop(room)
+            print(room)
+            for client in clients:
+                client.sendMessage("deleted room:" + room)
 
     # Create room for host
     def random_room(self):
