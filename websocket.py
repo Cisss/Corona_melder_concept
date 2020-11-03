@@ -7,24 +7,28 @@ clients = []
 roles = {}
 rooms = {}
 players = {}
+json_questions = {}
+questions = {}
 class SimpleChat(WebSocket):
-
+    # handel messages
     def handleMessage(self):
         message = json.loads(self.data)
         # Handle simple return request
         if 'request' in message:
             # Handle room request
             if message['request'] == 'room':
+                # get questions
+                self.get_questions()
                 room = self.random_room()
                 self.sendMessage("room:" + str(room))
             elif message['request'] == 'question':
-                self.random_player().sendMessage("random question")               
+                self.random_player().sendMessage(self.random_question())               
         # Add player to room
         elif 'join' in message:
             room = message['join']
             if room in rooms:
-                datad = {self}
-                rooms[room] += datad
+                player = {self}
+                rooms[room] += player
                 players[room] = rooms[room].copy()
             else:
                 print('invalid number')
@@ -40,30 +44,45 @@ class SimpleChat(WebSocket):
 
     # choose a random user
     def random_player(self):
-        print("rooms", rooms)
         # if there are one or more rooms
         if rooms != []:
             # select room that the current user is in
             for room in rooms:
-                print(rooms[room])
                 if self in rooms[room]:
                     # choose random player
                     num = len(players[room])
-                    print("number", num)
                     index = random.choice(range(num))
                     active_player = players[room][index]
                     # Remove player from players
                     players[room].pop(index)
                     # if there is only one player left reset players
                     if(num == 1):
-                        print(players[room])
-                        print(rooms[room])
-                        players[room] = rooms[room]
-                        print(players[room])
+                        players[room] = rooms[room].copy()
                     # return choosen user
                     return active_player
-                        
-        
+
+    #  get questions
+    def get_questions(self):
+        with open('questions.json') as json_file:
+            data = json.load(json_file)
+            # create questions
+            json_questions["questions"] = data["questions"].copy()
+            questions['questions'] = json_questions["questions"].copy()
+
+    # choose a random question
+    def random_question(self):
+        # if questions is empty reset
+        if questions['questions'] == []:
+            questions['questions'] = json_questions["questions"].copy()
+        # choose random question
+        num = len(questions["questions"])
+        index = random.choice(range(num))
+        random_question = questions["questions"][index]
+        # delete choosen question
+        questions['questions'].pop(index)
+        # return choosen question
+        return(random_question)
+
     def handleConnected(self):
         print(self.address, 'connected')
         for client in clients:

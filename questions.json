@@ -1,7 +1,10 @@
 {
-    "questions": {
-        "1": "Wat is je steen en parel van deze week?",
-        "2": "Wat is het gekste dat je ooit gedaan hebt?",
-        "3": "Hoe is je dag?"
-    } 
+	"questions": [
+	    "Wat heb je vandaag gedaan?",
+	    "Wat is je steen en parel deze week?",
+	    "Never have I ever: geskinnydipped?",
+	    "Never have I ever: iets gejat?",
+	    "Wat is het mooiste aan Groningen?",
+	    "Wanneer heb je voor het laatst een biertje gedronken?"
+	]
 }
